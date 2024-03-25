@@ -120,6 +120,15 @@ export async function handleSearch(event) {
   const response = await searchCities(searchValue);
 
   const citiesObjects = response.map((city) => getWeatherByCity(city.url));
+  const transform = await Promise.all(citiesObjects);
 
-  return citiesObjects;
+  const createElements = transform.map((city) => {
+    const citiesList = document.getElementById('cities');
+    const currentElement = createCityElement(city);
+
+    return citiesList.appendChild(currentElement);
+  });
+
+  console.log(transform);
+  console.log(createElements);
 }
