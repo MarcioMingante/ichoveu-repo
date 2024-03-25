@@ -1,4 +1,5 @@
 import { handleSearch } from './helpers/pageFunctions';
+import { searchCities } from './helpers/weatherAPI';
 import './style.css';
 
 document.getElementById('search-form')
@@ -8,5 +9,3 @@ document.getElementById('close-forecast')
   .addEventListener('click', () => {
     document.getElementById('forecast-container').classList.add('hidden');
   });
-
-console.log('xablau');
