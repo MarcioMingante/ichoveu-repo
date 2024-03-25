@@ -120,4 +120,6 @@ export async function handleSearch(event) {
   const response = await searchCities(searchValue);
 
   const citiesObjects = response.map((city) => getWeatherByCity(city.url));
+
+  return citiesObjects;
 }
