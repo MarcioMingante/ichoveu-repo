@@ -1,4 +1,4 @@
-import { getWeatherByCity, searchCities } from './weatherAPI';
+import { getWeatherByCity, getWeekWeatherByCity, searchCities } from './weatherAPI';
 
 /**
  * Cria um elemento HTML com as informações passadas
@@ -77,7 +77,7 @@ export function showForecast(forecastList) {
  * Recebe um objeto com as informações de uma cidade e retorna um elemento HTML
  */
 export function createCityElement(cityInfo) {
-  const { name, country, temp, condition, icon /* , url */ } = cityInfo;
+  const { name, country, temp, condition, icon, url } = cityInfo;
 
   const cityElement = createElement('li', 'city');
 
@@ -101,8 +101,17 @@ export function createCityElement(cityInfo) {
   infoContainer.appendChild(tempContainer);
   infoContainer.appendChild(iconElement);
 
+  const infoButton = createElement('button', 'city-forecast-button', 'Ver previsão');
+  infoButton.addEventListener('click', async () => {
+    const data = getWeekWeatherByCity(url);
+    const treated = await data;
+
+    return showForecast(treated);
+  });
+
   cityElement.appendChild(headingElement);
   cityElement.appendChild(infoContainer);
+  cityElement.appendChild(infoButton);
 
   return cityElement;
 }
@@ -122,13 +131,10 @@ export async function handleSearch(event) {
   const citiesObjects = response.map((city) => getWeatherByCity(city.url));
   const transform = await Promise.all(citiesObjects);
 
-  const createElements = transform.map((city) => {
+  transform.map((city) => {
     const citiesList = document.getElementById('cities');
     const currentElement = createCityElement(city);
 
     return citiesList.appendChild(currentElement);
   });
-
-  console.log(transform);
-  console.log(createElements);
 }

@@ -12,6 +12,21 @@ export const searchCities = async (term) => {
   return data;
 };
 
+export const getWeekWeatherByCity = async (cityURL) => {
+  const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?lang=pt&key=${TOKEN}&q=${cityURL}&days=7`);
+  const data = await response.json();
+
+  const treatment = data.forecast.forecastday.map((current) => ({
+    date: current.date,
+    maxTemp: current.day.maxtemp_c,
+    minTemp: current.day.mintemp_c,
+    condition: current.day.condition.text,
+    icon: current.day.condition.icon,
+  }));
+
+  return treatment;
+};
+
 export const getWeatherByCity = async (cityURL) => {
   const response = await fetch(`http://api.weatherapi.com/v1/current.json?lang=pt&key=${TOKEN}&q=${cityURL}`);
   const data = await response.json();
